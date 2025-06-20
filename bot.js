@@ -46,8 +46,8 @@ client.on('messageCreate', message => {
             message.channel.send(`找不到「${keyword}」的記憶`);
         }
     }
-    else if (content.startsWith('..')) {
-        const keyword = content.substring(2).trim();
+    else if (content.startsWith('...')) {
+        const keyword = content.substring(3).trim();
         if (keyword in memory) {
             message.channel.send(memory[keyword]);
         } else {
