@@ -36,9 +36,8 @@ client.on('messageCreate', message => {
     if (message.author.bot) return;
 
     const content = message.content.trim();
-    // 刪除記憶：...刪除 早安 或 ...delete 早安
-    if (content.startsWith('...刪除') || content.startsWith('...delete')) {
-        const keyword = content.substring(6).trim(); // 6 for '...刪除' or '...delete'
+    if (content.startsWith('..del')) {
+        const keyword = content.substring(4).trim();
         if (keyword in memory) {
             delete memory[keyword];
             saveMemory();
@@ -47,16 +46,14 @@ client.on('messageCreate', message => {
             message.channel.send(`找不到「${keyword}」的記憶`);
         }
     }
-    // 查詢詞組：...早安
-    else if (content.startsWith('...')) {
-        const keyword = content.substring(3).trim();
+    else if (content.startsWith('..')) {
+        const keyword = content.substring(2).trim();
         if (keyword in memory) {
             message.channel.send(memory[keyword]);
         } else {
             message.channel.send(`找不到「${keyword}」`);
         }
     }
-    // 設定詞組：..早安 123
     else if (content.startsWith('..')) {
         const parts = content.substring(2).trim().split(' ');
         if (parts.length >= 2) {
