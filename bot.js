@@ -49,7 +49,9 @@ client.on('messageCreate', message => {
     else if (content.startsWith('...')) {
         const keyword = content.substring(3).trim();
         if (keyword in memory) {
-            message.channel.send(memory[keyword]);
+            const responses = memory[keyword];
+            const randomResponse = Array.isArray(responses) ? responses[Math.floor(Math.random() * responses.length)] : responses;
+            message.channel.send(randomResponse);
         } else {
             message.channel.send(`找不到「${keyword}」`);
         }
@@ -59,9 +61,18 @@ client.on('messageCreate', message => {
         if (parts.length >= 2) {
             const keyword = parts[0];
             const response = parts.slice(1).join(' ');
-            memory[keyword] = response;
+            // 如果關鍵字已經存在，則將新內容加入現有陣列
+            if (memory[keyword]) {
+                if (!Array.isArray(memory[keyword])) {
+                    memory[keyword] = [memory[keyword]];
+                }
+                memory[keyword].push(response);
+                message.channel.send(`已儲存「${keyword}」為「${response}」`);
+            } else {
+                memory[keyword] = response;
+                message.channel.send(`已儲存「${keyword}」為「${response}」`);
+            }
             saveMemory();
-            message.channel.send(`已儲存「${keyword}」為「${response}」`);
         } else {
             message.channel.send('⚠️ 格式錯誤，用法：`..關鍵字 內容`');
         }
