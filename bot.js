@@ -37,7 +37,7 @@ client.on('messageCreate', message => {
 
     const content = message.content.trim();
     if (content.startsWith('..del')) {
-        const keyword = content.substring(4).trim();
+        const keyword = content.substring(5).trim();
         if (keyword in memory) {
             delete memory[keyword];
             saveMemory();
