@@ -119,6 +119,20 @@ client.on('messageCreate', message => {
     if (content.startsWith('..')) {
         const parts = content.substring(2).trim().split(/\s+/);
         
+        // 列出所有統計指令：..統計指令
+        if (parts[0] === '統計指令') {
+            if (memory.counters[guildId] && Object.keys(memory.counters[guildId]).length > 0) {
+                let list = '📜 **此伺服器的統計指令列表：**\n';
+                for (const [keyword, config] of Object.entries(memory.counters[guildId])) {
+                    list += `• 偵測「${keyword}」 -> 統計指令 \`...${config.display}\`\n`;
+                }
+                message.channel.send(list);
+            } else {
+                message.channel.send('目前此伺服器尚未設定任何計數器。');
+            }
+            return;
+        }
+
         // 新增計數器：..add count [關鍵字] [偵測後回話] [統計顯示名稱]
         if (parts[0] === 'add' && parts[1] === 'count' && parts.length >= 5) {
             const keyword = parts[2];
